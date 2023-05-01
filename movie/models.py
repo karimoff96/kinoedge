@@ -99,6 +99,35 @@ class Studio(models.Model):
         verbose_name_plural = "Studios"
         indexes = [models.Index(fields=["name"])]
 
+class Major(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Major"
+        verbose_name_plural = "Majors"
+        indexes = [models.Index(fields=["name"])]
+
+
+class Actor(models.Model):
+    name = models.CharField(max_length=255)
+    brief_info = models.CharField(max_length=300)
+    birth_place = models.CharField(max_length=255)
+    status = models.ManyToManyField(Major)
+    citizenship = CountryField()
+    career = models.CharField(max_length=50)
+    genre = models.ManyToManyField(Genre)
+    information = models.TextField()
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Actor"
+        verbose_name_plural = "Actors"
+        indexes = [models.Index(fields=["name"])]
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
@@ -114,7 +143,7 @@ class Movie(models.Model):
     world_premier_date = models.DateField()
     world_rating = models.CharField(max_length=20, choices=RATING_CHOICES, default=2)
     duration = models.IntegerField(default=0)
-    cast = models.CharField(max_length=256)
+    cast = models.ManyToManyField(Actor)
     brief_information = models.TextField()
     genre = models.ManyToManyField(Genre)
     trailer = models.FileField(upload_to="media/movie/trailes/")
@@ -140,6 +169,8 @@ class Movie(models.Model):
         indexes = [models.Index(fields=["title"])]
 
 
+
+
 def get_image_upload_path(instance, filename):
     if instance.movie:
         return f"images/movie/%Y/%m/%d/{instance.movie.id}/{filename}"
@@ -147,12 +178,15 @@ def get_image_upload_path(instance, filename):
         return f"images/news/%Y/%m/%d/{instance.news.id}/{filename}"
     elif instance.studio:
         return f"images/studio/%Y/%m/%d/{instance.studio.id}/{filename}"
+    elif instance.actor:
+        return f"images/actor/%Y/%m/%d/{instance.actor.id}/{filename}"
     else:
         return f"images/other/%Y/%m/%d/{filename}"
 
 
 class Image(models.Model):
     image = models.ImageField(upload_to=get_image_upload_path)
+    actor = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True, blank=True)
     news = models.ForeignKey(News, on_delete=models.CASCADE, null=True, blank=True)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE, null=True, blank=True)
