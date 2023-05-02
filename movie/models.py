@@ -26,7 +26,7 @@ class Tag(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=255)
-    contnent = models.TextField()
+    content = models.TextField()
     publication_date = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
