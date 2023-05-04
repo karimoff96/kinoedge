@@ -12,6 +12,7 @@ class UserAdminConfig(UserAdmin):
         "email",
         "user_name",
         "first_name",
+        "password",
     )
     list_filter = ("email", "user_name", "first_name", "is_active", "is_staff")
     ordering = ("-start_date",)
@@ -24,6 +25,7 @@ class UserAdminConfig(UserAdmin):
                     "email",
                     "user_name",
                     "first_name",
+                    "password",
                 )
             },
         ),

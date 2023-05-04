@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #additional libraries
+    "rest_framework.authtoken",
     'multiselectfield',
     'rest_framework',
     

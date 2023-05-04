@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('index/', views.index, name='index'),
     path('news/', views.NewsListAPIView.as_view()),
     path('news/<int:news_id>/', views.NewsDetailAPIView.as_view()),
     path('actor/', views.ActorListAPIView.as_view()),

@@ -5,10 +5,6 @@ from .models import News, Tag, Actor, Genre, Major
 from .serializers import NewsSerializer, ActorSerializer
 from rest_framework import status
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello world")
-
 
 class NewsListAPIView(APIView):
     def get(self, request):
