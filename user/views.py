@@ -26,7 +26,6 @@ class SignUpAPIView(APIView):
 
 class LoginAPIView(APIView):
     permission_classes = []
-
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
