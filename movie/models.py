@@ -71,38 +71,6 @@ class Category(models.Model):
         indexes = [models.Index(fields=["name"])]
 
 
-
-
-class Major(models.Model):
-    name = models.CharField(max_length=128)
-
-    def __str__(self) -> str:
-        return self.name
-
-    class Meta:
-        verbose_name = "Major"
-        verbose_name_plural = "Majors"
-        indexes = [models.Index(fields=["name"])]
-
-
-class Actor(models.Model):
-    name = models.CharField(max_length=255)
-    brief_info = models.CharField(max_length=300)
-    birth_place = models.CharField(max_length=255)
-    status = models.ManyToManyField(Major)
-    citizenship = CountryField()
-    career = models.CharField(max_length=50)
-    genre = models.ManyToManyField(Genre)
-    information = models.TextField()
-
-    def __str__(self) -> str:
-        return self.name
-
-    class Meta:
-        verbose_name = "Actor"
-        verbose_name_plural = "Actors"
-        indexes = [models.Index(fields=["name"])]
-
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(null=True, blank=True, unique=True)
@@ -117,11 +85,11 @@ class Movie(models.Model):
     world_premier_date = models.DateField()
     world_rating = models.CharField(max_length=20, choices=RATING_CHOICES, default=2)
     duration = models.IntegerField(default=0)
-    cast = models.ManyToManyField(Actor)
+    cast = models.ManyToManyField('actor.Actor')
     brief_information = models.TextField()
     genre = models.ManyToManyField(Genre)
     trailer = models.FileField(upload_to="media/movie/trailes/")
-    logo = models.ImageField(upload_to="images/movie/logo/%d")
+    logo = models.ImageField(upload_to="images/movie/logo/")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     age_limit = models.IntegerField(default=1)
@@ -160,7 +128,7 @@ def get_image_upload_path(instance, filename):
 
 class Image(models.Model):
     image = models.ImageField(upload_to=get_image_upload_path)
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True, blank=True)
+    actor = models.ForeignKey('actor.Actor', on_delete=models.CASCADE, null=True, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True, blank=True)
     news = models.ForeignKey(News, on_delete=models.CASCADE, null=True, blank=True)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE, null=True, blank=True)

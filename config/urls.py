@@ -22,5 +22,6 @@ urlpatterns = [
     path('movie/', include('movie.urls')),
     # path('api-auth/', include('rest_framework.urls')),
     path('user/', include('user.urls')),
-    path('studio/', include('studio.urls'))
+    path('studio/', include('studio.urls')),
+    path('actor/', include('actor.urls')),
 ]

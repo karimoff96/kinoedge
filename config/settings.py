@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'studio',
     'movie',
     'user',
+    'actor',
 ]
 
 MIDDLEWARE = [
