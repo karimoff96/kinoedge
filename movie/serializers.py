@@ -1,11 +1,6 @@
-from .models import Movie, Genre, News, Category
+from .models import Movie, Genre, Category
 from rest_framework import serializers
 
-
-class NewsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = News
-        fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):

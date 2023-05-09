@@ -8,8 +8,6 @@ admin.site.register(Studio)
 admin.site.register(Movie)
 admin.site.register(Image)
 admin.site.register(Genre)
-admin.site.register(News)
-admin.site.register(Tag)
 
 
 admin.site.unregister(Group)

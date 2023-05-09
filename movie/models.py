@@ -11,37 +11,6 @@ RATING_CHOICES = (
     ("1", "1"),
 )
 
-
-class Tag(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self) -> str:
-        return self.name
-
-    class Meta:
-        verbose_name = "Tag"
-        verbose_name_plural = "Tags"
-        indexes = [models.Index(fields=["name"])]
-
-
-class News(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    publication_date = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    source = models.CharField(max_length=255)
-    tag = models.ManyToManyField(Tag)
-
-    def __str__(self) -> str:
-        return self.title
-
-    class Meta:
-        verbose_name = "News"
-        verbose_name_plural = "News"
-        indexes = [models.Index(fields=["title"])]
-
-
 class Genre(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -95,7 +64,7 @@ class Movie(models.Model):
     age_limit = models.IntegerField(default=1)
     category = models.ManyToManyField(Category)
     studio = models.ManyToManyField(Studio)
-    tag = models.ManyToManyField(Tag)
+    tag = models.ManyToManyField('news.Tag')
 
     def __str__(self) -> str:
         return self.title
@@ -130,5 +99,5 @@ class Image(models.Model):
     image = models.ImageField(upload_to=get_image_upload_path)
     actor = models.ForeignKey('actor.Actor', on_delete=models.CASCADE, null=True, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True, blank=True)
-    news = models.ForeignKey(News, on_delete=models.CASCADE, null=True, blank=True)
+    news = models.ForeignKey('news.News', on_delete=models.CASCADE, null=True, blank=True)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE, null=True, blank=True)

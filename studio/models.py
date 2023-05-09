@@ -26,7 +26,7 @@ class Studio(models.Model):
     video = models.FileField(upload_to="media/studio/video/%Y/%m/%d", null=True, blank=True)
     logo = models.ImageField(upload_to="images/studio/logo/", null=True, blank=True)
     award = models.CharField(max_length=255, null=True, blank=True)
-    news = models.ForeignKey("movie.News", on_delete=models.CASCADE)
+    news = models.ForeignKey("news.News", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name

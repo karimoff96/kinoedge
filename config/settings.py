@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     #django apps
     'studio',
     'movie',
-    'user',
     'actor',
+    'user',
+    'news',
 ]
 
 MIDDLEWARE = [
