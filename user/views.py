@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from .tokens import create_jwt_pair_for_user
 from rest_framework.response import Response
 from .serializers import SignUpSerializer
@@ -27,9 +27,9 @@ class LoginAPIView(APIView):
     permission_classes = []
 
     def post(self, request):
-        obj = CustomUser.objects.get(email=email)
         email = request.data.get("email")
         password = request.data.get("password")
+        obj = CustomUser.objects.get(email=email)
         data = {
             "user_name": obj.user_name,
             "first_name": obj.first_name,
@@ -48,3 +48,9 @@ class LoginAPIView(APIView):
     def get(self, request):
         content = {"user": str(request.user), "auth": str(request.auth)}
         return Response(data=content, status=status.HTTP_200_OK)
+    
+    
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({'msg': 'Successfully Logged out'}, status=status.HTTP_200_OK)
