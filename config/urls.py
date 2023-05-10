@@ -24,4 +24,5 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('studio/', include('studio.urls')),
     path('actor/', include('actor.urls')),
+    path('news/', include('news.urls')),
 ]

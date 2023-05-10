@@ -7,4 +7,5 @@ urlpatterns = [
     path('category/<int:category_id>/', views.CategoryDetailAPIView.as_view()),
     path('genre/', views.GenreListAPIView.as_view()),
     path('genre/<int:genre_id>/', views.GenreDetailAPIView.as_view()),
+    path('movie/', views.MovieListAPIVIew.as_view())
 ]
