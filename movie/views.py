@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Genre, Category, Movie
 from rest_framework import status
-
+from rest_framework.permissions import IsAuthenticated
 
 class CategoryListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         category = Category.objects.all()
         serializer = CategorySerializer(instance=category, many=True)
