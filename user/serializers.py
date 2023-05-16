@@ -56,8 +56,8 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=3)
-    password = serializers.CharField(max_length=68, min_length=6, write_only=True)
-    user_name = serializers.CharField(max_length=68, min_length=6, read_only=True)
+    password = serializers.CharField(max_length=68, min_length=1, write_only=True)
+    user_name = serializers.CharField(max_length=68, min_length=1, read_only=True)
     tokens = serializers.CharField(max_length=500, min_length=6, read_only=True)
 
     class Meta:
@@ -74,9 +74,17 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed("Account disaled, contact to admin")
         if not user.is_verified:
             raise AuthenticationFailed("Email is not verified")
-
-        return {
-            "email": user.email,
-            "username": user.user_name,
-            "tokens": create_jwt_pair_for_user(user),
+        obj = CustomUser.objects.get(email=email)
+        if obj.is_staff:
+            authority = "ADMIN"
+        else:
+            authority = "USER"
+        details = {
+            "user_name": obj.user_name,
+            "email": obj.email,
+            "first_name": obj.first_name,
+            "start_date": obj.start_date,
+            "about": obj.about,
+            "is_staff": authority,
         }
+        return details

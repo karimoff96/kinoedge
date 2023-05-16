@@ -88,32 +88,22 @@ class LoginAPIView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-        # email = request.data.get("email")
-        # password = request.data.get("password")
-        # obj = CustomUser.objects.get(email=email)
-        # if obj.is_staff:
-        #     authority = "ADMIN"
-        # else:
-        #     authority = "USER"
-        # data = {
-        #     "user_name": obj.user_name,
-        #     "email": obj.email,
-        #     "first_name": obj.first_name,
-        #     "start_date": obj.start_date,
-        #     "about": obj.about,
-        #     "is_staff": authority,
-        # }
-        # user = authenticate(email=email, password=password)
-        # if user is not None:
-        #     tokens = create_jwt_pair_for_user(user)
-        #     response = {"message": "Login Successfull", "token": tokens, "user": data}
-        #     return Response(data=response, status=status.HTTP_200_OK)
-        # else:
-        #     return Response(
-        #         data={"message": "Invalid email or password"},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
+
+        obj = CustomUser.objects.get(email=serializer.data["email"])
+        if obj.is_staff:
+            authority = "ADMIN"
+        else:
+            authority = "USER"
+        data = {
+            "user_name": obj.user_name,
+            "email": obj.email,
+            "first_name": obj.first_name,
+            "start_date": obj.start_date,
+            "about": obj.about,
+            "is_staff": authority,
+            "tokens": create_jwt_pair_for_user(obj),
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):
