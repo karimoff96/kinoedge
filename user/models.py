@@ -41,16 +41,16 @@ class CustomAccountManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True, blank=False, null=False)
     user_name = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150)
+    full_name = models.CharField(max_length=150)
     start_date = models.DateTimeField(default=timezone.now)
-    about = models.TextField(_("about"), max_length=500, blank=True)
+    about = models.TextField(_("about"), max_length=500, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
     objects = CustomAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["user_name", "first_name"]
+    REQUIRED_FIELDS = ["user_name"]
 
     def __str__(self) -> str:
         return self.user_name

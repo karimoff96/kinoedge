@@ -31,6 +31,7 @@ class SignUpAPIView(APIView):
             user = CustomUser.objects.get(email=request.data["email"])
             token = RefreshToken.for_user(user).access_token
             current_site = get_current_site(request).domain
+            print(current_site)
             relative_link = reverse("email-verify")
 
             abs_url = "http://" + current_site + relative_link + "?token=" + str(token)
@@ -55,7 +56,6 @@ class VerifyEmail(APIView):
         description="Description",
         type=openapi.TYPE_STRING,
     )
-
     @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
         token = request.GET.get("token")

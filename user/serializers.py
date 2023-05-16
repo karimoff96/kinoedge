@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from .models import CustomUser
 from django.contrib import auth
-from .tokens import create_jwt_pair_for_user
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -32,7 +31,8 @@ class SignUpSerializer(serializers.ModelSerializer):
         user = super().create(validated_data)
         user.set_password(password)
         user.save()
-        Token.objects.create(user=user)
+        t=Token.objects.create(user=user)
+        # print(t, '*'*20)
         return user
 
 
