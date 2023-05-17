@@ -14,9 +14,23 @@ class UserAdminConfig(UserAdmin):
         "full_name",
         "password",
     )
-    list_filter = ("email", "user_name", "full_name", "is_active", "is_staff", "is_verified")
+    list_filter = (
+        "email",
+        "user_name",
+        "full_name",
+        "is_active",
+        "is_staff",
+        "is_verified",
+    )
     ordering = ("-start_date",)
-    list_display = ("email", "user_name", "full_name", "is_active", "is_staff", "is_verified")
+    list_display = (
+        "email",
+        "user_name",
+        "full_name",
+        "is_active",
+        "is_staff",
+        "is_verified",
+    )
     fieldsets = (
         (
             None,
@@ -33,12 +47,25 @@ class UserAdminConfig(UserAdmin):
         ("Personal", {"fields": ("about",)}),
     )
     formfield_overrides = {
-        CustomUser.about: {'widget': Textarea(attrs={'rows':10, 'cols':40})},
+        CustomUser.about: {"widget": Textarea(attrs={"rows": 10, "cols": 40})},
     }
     add_fieldsets = (
-        (None, {'classes': ('wide',),
-                'fields':('email', 'user_name', 'full_name', 'password1', 'password2', 'is_active', 'is_staff', "is_verified")}
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "user_name",
+                    "full_name",
+                    "password1",
+                    "password2",
+                    "is_active",
+                    "is_staff",
+                    "is_verified",
                 ),
+            },
+        ),
     )
 
 

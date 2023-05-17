@@ -82,9 +82,10 @@ class LoginSerializer(serializers.ModelSerializer):
         details = {
             "user_name": obj.user_name,
             "email": obj.email,
-            "first_name": obj.first_name,
+            "full_name": obj.full_name,
             "start_date": obj.start_date,
             "about": obj.about,
             "is_staff": authority,
+            "is_verified":obj.is_verified
         }
         return details

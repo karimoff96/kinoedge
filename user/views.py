@@ -20,7 +20,8 @@ import jwt
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+# from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
 class SignUpAPIView(APIView):
     def post(self, request):
@@ -34,7 +35,7 @@ class SignUpAPIView(APIView):
             print(current_site)
             relative_link = reverse("email-verify")
 
-            abs_url = "http://" + current_site + relative_link + "?token=" + str(token)
+            abs_url = "http://" + '192.168.1.150:3000' + relative_link + "?token=" + str(token)
             email_body = f"Hi {user.user_name}! Use the link below to verify your email:\n{abs_url}"
 
             data = {
@@ -56,6 +57,7 @@ class VerifyEmail(APIView):
         description="Description",
         type=openapi.TYPE_STRING,
     )
+
     @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
         token = request.GET.get("token")
@@ -67,6 +69,8 @@ class VerifyEmail(APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
+            # return HttpResponseRedirect("/user/login/")
+
             return Response(
                 data={"email": "Successfully activated"}, status=status.HTTP_200_OK
             )
@@ -84,6 +88,14 @@ class VerifyEmail(APIView):
 
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    def get_queryset(self):
+        # Return the desired queryset for the GET request
+        return CustomUser.objects.all()
+
+    def get(self, request):
+        queryset = self.get_queryset()
+        data = {"message": "Email has been successfully verified"}
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -97,10 +109,11 @@ class LoginAPIView(generics.GenericAPIView):
         data = {
             "user_name": obj.user_name,
             "email": obj.email,
-            "first_name": obj.first_name,
+            "full_name": obj.full_name,
             "start_date": obj.start_date,
             "about": obj.about,
             "is_staff": authority,
+            "is_verified":obj.is_verified,
             "tokens": create_jwt_pair_for_user(obj),
         }
         return Response(data=data, status=status.HTTP_200_OK)
