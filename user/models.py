@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 
 
 class CustomAccountManager(BaseUserManager):
-    def create_superuser(self, email, user_name, first_name, password, **other_fields):
+    def create_superuser(self, email, user_name, full_name, password, **other_fields):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
         other_fields.setdefault("is_active", True)
@@ -22,15 +22,16 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError("Superuser must be assignet to is_staff=True")
         if other_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must be assignet to is_superuser=True")
-        return self.create_user(email, user_name, first_name, password, **other_fields)
+        
+        return self.create_user(email, user_name, full_name, password, **other_fields)
 
-    def create_user(self, email, user_name, first_name, password, **other_fields):
+    def create_user(self, email, user_name, full_name, password, **other_fields):
         if not email:
             raise ValueError(_("You must provide an email address!"))
 
         email = self.normalize_email(email)
         user = self.model(
-            email=email, user_name=user_name, first_name=first_name, **other_fields
+            email=email, user_name=user_name, full_name=full_name, **other_fields
         )
         user.set_password(password)
         user.save()
@@ -41,7 +42,7 @@ class CustomAccountManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True, blank=False, null=False)
     user_name = models.CharField(max_length=150, unique=True)
-    full_name = models.CharField(max_length=150)
+    full_name = models.CharField(max_length=150, blank=True, null=True)
     start_date = models.DateTimeField(default=timezone.now)
     about = models.TextField(_("about"), max_length=500, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
@@ -50,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["user_name"]
+    REQUIRED_FIELDS = ["user_name", "full_name"]
 
     def __str__(self) -> str:
         return self.user_name

@@ -5,7 +5,7 @@ from .serializers import (
     LoginSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import logout
 from .tokens import create_jwt_pair_for_user
 from rest_framework.response import Response
 from rest_framework.views import APIView
